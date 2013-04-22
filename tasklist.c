@@ -1,3 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "tasklinkedlist.h"
+
+
+/* makeTask                                                                                                                                   
+ *  *                                                                                                                                         
+ *   * This function takes the parameters with the information for a task.                                                                    
+ *    * These parameters are stored in **temporary** strings.  Your job is                                                                    
+ *     * to create a new task and fill in the fields properly.  Return this                                                                   
+ *      * new task.  Make sure you think carefully about what malloc call(s)                                                                  
+ *       * you need to make.                                                                                                                  
+ *        */
+
+task *makeTask(char *name,char *date,char *priority)
+{
+  int i;
+  task *t = (struct _task*)malloc(sizeof(struct _task));
+  t->priority = atoi(priority);
+
+  //allocate memory for the struct                                                                                                            
+  t->task_name = (char *)malloc(sizeof(char)*(strlen(name)+1));
+
+  //set value for the struct pieces                                                                                                           
+  for(i=0;i<strlen(name)-1;i++){
+    t->task_name[i]=name[i];
+    if(t->task_name[i]=='\n'){
+      t->task_name[i]='\0';
+    }
+  }
+
+
+  for(i=0;i<=strlen(date)-1;i++){
+    t->date_entered[i]=date[i];
+    if(t->date_entered[i]=='\n'){
+      t->date_entered[i]='\0';
+    }
+  }
+  return t; // FILL THIS IN                                                                                                                   
+
+}
+
+
+/* createAndInitialize                                                                                                                        
+ * *                                                                                                                                          
+ * * This function allocates space for a task list and initializes the task list                                                              
+ * * to an initial state. Additionally, it returns the newly created task list                                                                
+ * * structure to the caller.                                                                                                                 
+ * *                                                                                                                                          
+ * * Initializing the task list involves assigning values to each of the attributes                                                           
+ * * of the 'tasklinkedlist' structure.                                                                                                       
+ * */
+
+tasklinkedlist *createAndInitialize()
+{
+  tasklinkedlist *pTaskLinkedList = (struct _tasklinkedlist*)malloc(sizeof(struct _tasklinkedlist));
+  //  node *pNode = (struct _node*)malloc(sizeof(struct _node));                                                                              
+  pTaskLinkedList->head = NULL;
+  //pNode->theTask = NULL;                                                                                                                    
+  //pNode->next = NULL;                                                                                                                       
+  return pTaskLinkedList;
+}
+
+
+
+/* addHead                                                                                                                                    
+ * *                                                                                                                                          
+ * * This function takes two parameters - the task list and the task to be inserted.                                                          
+ * * It attempts to add the said task to the head of the tasklinkedlist.                                                                      
+ * *                                                                                                                                          
+ * * NOTE:                                                                                                                                    
+ * * Two possible cases to consider :                                                                                                         
+ * * 1 - when the list is empty                                                                                                               
+ * * 2 - when the list is non-empty                                                                                                           
+ * */
 
 void addHead(tasklinkedlist *list,task *new_task)
 {
@@ -109,14 +186,6 @@ void addTasksFromFile(tasklinkedlist * mytasklinkedlist, FILE *fp)
 {
        //insert code here                                                                                                                     
 }
-
-
-
-
-
-
-
-
 
 
 
