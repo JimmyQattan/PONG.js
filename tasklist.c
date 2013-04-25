@@ -192,14 +192,13 @@ void deleteItem(tasklinkedlist *list,int toDelete)
 
 void addTasksFromFile(tasklinkedlist * mytasklinkedlist, FILE *fp)
 {
+  
   char *t, *p, *d;
   task *t1 = (struct _task*)malloc(sizeof(struct _task));
-  while(!feof(fp))
-    {
-      fscanf(fp,"%s,%s,%s\n",t,p,d);
-      t1 = makeTask(t,p,d);
-      addHead(mytasklinkedlist,t1);
-    }
+  fscanf(fp,"%s,%s,%s\n",t,p,d);
+  t1 = makeTask(t,p,d);
+  addHead(mytasklinkedlist,t1);
+      
 }
 
 
