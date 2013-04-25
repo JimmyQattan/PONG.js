@@ -174,12 +174,12 @@ void deleteItem(tasklinkedlist *list,int toDelete)
    if(current == list->head)
    {
      list->head = current->next;
-     current->next = NULL;
+     current = NULL;
    }
    else
    {
      previous->next = current->next;
-     current->next=NULL;
+     current=NULL;
    }
   }
 }
