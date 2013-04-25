@@ -1,27 +1,75 @@
-*.py[co]
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "tasklinkedlist.h"
 
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
 
-# Installer logs
-pip-log.txt
 
-# Unit test / coverage reports
-.coverage
-.tox
 
-#Translations
-*.mo
+void main(int argc, char *argv[])
+{
+                //File open error                                                                   
+  //    printf("ERROR: Could not open file %s\n");                                                  
+  char buf1[50], buf2[100], buf3[100], buf4[50], buf5[50], buf6[50], buf7[50];
+  int p=1,q=0, toDelete, length;
+  tasklinkedlist *list = createAndInitialize();
+  task *pTask;
+  FILE *fp;
+  while(!q)
+  {
+    printf("0) Exit\n1) List Tasks\n2) Add Task\n");
+    printf("3) Delete Task\n4) List Length\n5) Add Task From File\n");                             \
 
-#Mr Developer
-.mr.developer.cfg
+    printf("What would you like to do?\n");
+    fgets(buf1, 50, stdin);
+    p = atoi(buf1);
+      switch(p)
+      {
+          case 0:
+            q=1;
+            break;
+          case 1:
+            printTaskList(list);
+            break;
+          case 2:
+            printf("Enter task name: ");
+            fgets(buf2,100,stdin);
+            printf("Enter task priority: ");
+            fgets(buf3,100,stdin);
+            printf("Enter task start date: ");
+            fgets(buf4,50,stdin);
+            pTask = makeTask(buf2,buf4,buf3);
+            addHead(list,pTask);
+            break;
+          case 3:
+            printTaskList(list);
+            printf("What task would you like to delete? ");
+            fgets(buf6,50,stdin);
+            toDelete = atoi(buf6);
+            deleteItem(list,toDelete);
+            break;
+          case 4:
+            length = listLength(list);
+            printf("Length of the list : %i\n", length);
+            break;
+          case 5:
+            printf("Enter the filename ");
+            fgets(buf7,50,stdin);
+            fp = fopen(buf7,"r");
+            addTasksFromFile(list,fp);
+            fclose(fp);
+            break;
+          default:
+            printf("ERROR: %d: Incorrect menu option\n", p);
+      }
+  }
+}
+
+
+
+
+
+
+
+
+
