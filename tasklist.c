@@ -102,13 +102,9 @@ int LinkedList::removeTailRec()
         // first do the base cases that do not require recursion                                                                                         
   if(head == NULL)
     return 0;
-  if(head->next == NULL)
-  {
-    int retval = head->value;
-    delete head;
-    head = NULL;
-    return retval;
-  }
+  else
+    return removeTailRec(head);
+
 
 
 }
@@ -121,17 +117,20 @@ int LinkedList::removeTailRec()
 int LinkedList::removeTailRec(Node *n)
 {
   // check for the base case(s)                                                                                                                          
-  n = head;
-  if(n == NULL)
-    return 0;
   if(n->next == NULL)
   {
-    int retval = head->value;
-    delete n;
+    int retval = n->value;
     n = NULL;
     return retval;
   }
-  removeTailRec(n->next);
+  if(n->next->next == NULL)
+  {
+      int retval = n->next->value;
+      n->next = NULL;
+      return retval;
+  }
+  else
+    return removeTailRec(n->next);
 
         // else call the recursive method                                                                                                                
 }
