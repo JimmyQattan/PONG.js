@@ -1,3 +1,83 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+#include "LinkedList.h"
+
+LinkedList::LinkedList()
+{
+        head = NULL;
+        tail = NULL;
+        // TODO: initialize tail                                                                                                                         
+}
+
+/* copy constructor                                                                                                                                      
+ * TODO:  Copy the entire linked list for a DEEP COPY                                                                                                    
+ */
+
+LinkedList::LinkedList(LinkedList &oldlist)
+{
+  Node *nHead = new Node();
+  Node *nTail = new Node();
+  nHead = oldlist.head;
+  for(nTail = nHead; nTail->next !=NULL; nTail = nTail->next)
+    ;
+
+
+}
+
+/* destructor                                                                                                                                            
+ *                                                                                                                                                       
+ * TODO: delete all of the nodes in the linked list                                                                                                      
+ */
+LinkedList::~LinkedList()
+{
+      head = NULL;
+      tail = NULL;
+}
+
+
+/* addHead                                                                                                                                               
+ * add an item to the front of the linked list                                                                                                           
+ * TODO: properly update the tail pointer                                                                                                                
+ */
+
+void LinkedList::addHead(int v)
+{
+        // create a new Link and put v into that Link                                                                                                    
+        Node *l = new Node();
+        l->value = v;
+        // if the list is empty, this link is the only thing in it                                                                                       
+        // all we need to do is point head to the link                                                                                                   
+        if (head == NULL)
+        {
+                head = l;
+                tail = l;
+                head->next = NULL;
+                tail->next = NULL;
+        }
+        // if there is already something there, we point this new link                                                                                   
+        // to the old head of the list.  Then, when we point head to this                                                                                
+        // Link, it becomes the beginning of the list, and the old beginning                                                                             
+        // is now 2nd.                                                                                                                                   
+        else
+        {
+
+                l->next = head;
+                head = l;
+                tail = l;
+                while(tail->next!=NULL)
+                  {
+                    //Big-O(n)                                                                                                                           
+                    tail = tail->next;
+
+                  }
+
+        }
+}
+
+/* addTail                                                                                                                                               
+ * add an element to the end of the linked list                                                                                                          
  * TODO: properly update the tail pointer                                                                                                                
  * make code more efficient if tail pointer helps                                                                                                        
  */
@@ -117,17 +197,19 @@ int LinkedList::removeTailRec()
 int LinkedList::removeTailRec(Node *n)
 {
   // check for the base case(s)                                                                                                                          
+  if(n == NULL)
+    return 0;
   if(n->next == NULL)
   {
     int retval = n->value;
-    n = NULL;
+    n          = NULL;
     return retval;
   }
   if(n->next->next == NULL)
   {
-      int retval = n->next->value;
-      n->next = NULL;
-      return retval;
+    int retval = n->next->value;
+    n->next    = NULL;
+    return retval;
   }
   else
     return removeTailRec(n->next);
@@ -153,31 +235,11 @@ void LinkedList::printList(FILE *f)
 */
 void LinkedList::addSortedRec(int v)
 {
-  Node *pNode = new Node();
-  pNode->value = v;
-  pNode->next = NULL;
-        // base case(s) outside of recursive call                                                                                                        
+  // base case(s) outside of recursive call                                                                                                              
   if(head == NULL)
-  {
-    head = pNode;
-  }
-  if(head->next == NULL)
-  {
-    if(pNode->value < head->value){
-      pNode->next = head;
-      head = pNode;
-      for(tail = head; tail->next!=NULL;tail = tail->next)
-        ;
-    }
-    else{
-      pNode->next = head->next;
-      head->next = pNode;
-      for(tail = head;tail->next!=NULL;tail = tail->next)
-        ;
-    }
-  }
-  head = head->next;
-  addSortedRec(pNode->value);
+    return;
+  else
+    addSortedRec(head, v);
 }
 
 
@@ -193,31 +255,55 @@ void LinkedList::addSortedRec(int v)
 */
 void LinkedList::addSortedRec(Node *n, int v)
 {
-  n->value = v;
-  n->next = NULL;
+
+
 
   // base case(s) outside of recursive call                                                                                                              
   if(head == NULL)
     {
+      n->value = v;
       head = n;
-      tail = n;
     }
   //Smaller Case                                                                                                                                         
-  else if(head->next == NULL)
+  if(head->next == NULL)
+  {
+    n->value = v;
+    if(v < head->value)
     {
-      if(n->value < head->value){
-        n->next = head;
-        head = n;
-        tail = n->next;
-      }
-      else{
-        head->next = n;
-        tail = head->next;
-      }
+      n->next = head;
+      head = n;
     }
-  else{}
+    else
+    {
+      head->next = n;
+    }
+  }
+  else
+    addSortedRec(n->next, v);
+}
 
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
