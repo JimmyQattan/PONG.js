@@ -13,19 +13,25 @@ TwentyQuestionsTree::TwentyQuestionsTree(FILE *)
 
   char buf1[150];
   char *questions[5];
-  TwentyQuestionsTree *tree = new TwentyQuestionsTree();
+
   while(fgets(buf1,150,stdout)!=NULL)
     {
-      questions[0] = strtok(buf1,",\n");
-      questions[1] = strtok(NULL,",\n");
-      questions[2] = strtok(NULL,",\n");
-      BinaryNode *r = new BinaryNode(tree->currentQuestion());
-      tree->insert(r,questions[0],questions[1],questions[2]);
-
+      if(root == NULL)
+      {
+        questions[0] = strtok(buf1,",\n");
+        root = new BinaryNode(questions[0]);
+      }
+      else
+      {
+        questions[0] = strtok(buf1,",\n");
+        questions[1] = strtok(NULL,",\n");
+        questions[2] = strtok(NULL,",\n");
+        insert(root,questions[0],questions[1],questions[2]);
+      }
     }
 
-
 }
+
 
 TwentyQuestionsTree::TwentyQuestionsTree()
 {
@@ -40,43 +46,55 @@ TwentyQuestionsTree::TwentyQuestionsTree()
  */
 bool TwentyQuestionsTree::insert(BinaryNode *r,char *parent, char *left, char *right)
 {
-
-  if(r->question != parent)
-    {
-      return false;
-    }
+  if(r->question == parent)
+  {
+    r->left = new BinaryNode(left);
+    r->right = new BinaryNode(right);
+    return true;
+  }
+  else if(r->question != parent)
+  {
+    insert(r->left,parent,left,right);
+    insert(r->right,parent,left,right);
+  }
   else
-    {
-      BinaryNode *RNode = new BinaryNode(right);
-      BinaryNode *LNode = new BinaryNode(left);
-      r->left = LNode;
-      r->right = RNode;
-      return true;
-    }
+    return false;
 }
 
-/* modifyAndInsert                                                                                                                                                                                                                                                                                                                                                                                                                                      
- *                                                                                                                                                                                                                                                                                                                                                                                                                                                      
- * This modifies the tree as a result of the game being incorrect.  Either                                                                                                                                                                                                                                                                                                                                                                              
- * the left child or right child is already in the tree.  This method replaces                                                                                                                                                                                                                                                                                                                                                                          
- * that existing one with the new parent and creates new left and right                                                                                                                                                                                                                                                                                                                                                                                 
- * children.                                                                                                                                                                                                                                                                                                                                                                                                                                            
+/* modifyAndInsert                                                                                    
+ *                                                                                                    
+ * This modifies the tree as a result of the game being incorrect.  Either                            
+ * the left child or right child is already in the tree.  This method replaces                        
+ * that existing one with the new parent and creates new left and right                               
+ * children.                                                                                          
  */
 bool TwentyQuestionsTree::modifyAndInsert(BinaryNode *n,char *parent, char *left, char *right)
 {
-  if(n->question == NULL)
+  if(n->question == left)
+  {
+    n->question = parent;
+    n->left = new BinaryNode(left);
+    n->right = new BinaryNode(right);
+    return true;
+  }
+  else if(n->question == right)
+  {
+    n->question = parent;
+    n->left = new BinaryNode(left);
+    n->right = new BinaryNode(right);
+    return true;
+  }
+  else if(n->question != left)
+  {
+    modifyAndInsert(n->left,parent,left,right);
+  }
+  else if(n->question != right)
+  {
+    modifyAndInsert(n->right,parent,left,right);
+  }
     return false;
-  else
-    {
-      n->question = parent;
-      BinaryNode *RNode = new BinaryNode(right);
-      BinaryNode *LNode = new BinaryNode(left);
-      n->left = LNode;
-      n->right = RNode;
-      return true;
-    }
-
 }
+
 void TwentyQuestionsTree::modifyAndInsert(char *parent, char *left, char *right)
 {
   modifyAndInsert(root,parent,left,right);
