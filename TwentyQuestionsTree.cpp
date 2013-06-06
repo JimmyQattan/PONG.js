@@ -8,27 +8,26 @@ using namespace std;
 #include <iostream>
 #include "TwentyQuestionsTree.h"
 
-TwentyQuestionsTree::TwentyQuestionsTree(FILE *)
+TwentyQuestionsTree::TwentyQuestionsTree(FILE *fp)
 {
 
-  char buf1[150];
-  char *questions[5];
-
-  while(fgets(buf1,150,stdout)!=NULL)
-    {
-      if(root == NULL)
+    char buf1[512];
+    char *questions[6];
+    int i = 0;
+    while(fgets(buf1,512,fp))
+      {
+        questions[0] = strtok(buf1,",\n");
+        questions[1] = strtok(NULL,",\n");
+        questions[2] = strtok(NULL,",\n");
+        if(root == NULL)
         {
-          questions[0] = strtok(buf1,",\n");
-          root = new BinaryNode(questions[0]);
+            root = new BinaryNode(questions[0]);
+            root->left = new BinaryNode(questions[1]);
+            root->right = new BinaryNode(questions[2]);
         }
-      else
-        {
-          questions[0] = strtok(buf1,",\n");
-          questions[1] = strtok(NULL,",\n");
-          questions[2] = strtok(NULL,",\n");
+        else
           insert(root,questions[0],questions[1],questions[2]);
-        }
-    }
+      }
 
 }
 
@@ -38,48 +37,40 @@ TwentyQuestionsTree::TwentyQuestionsTree()
   root = new BinaryNode("Is it a platypus?");
 }
 
-/* insert                                                                                          \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * This inserts two questions into the tree - the children of the parent.                          \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * This is used when building the tree from scratch.                                               \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * The assumption is that the parent is already in the tree, and we are                            \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * merely adding the left and right children.                                                      \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- */
 bool TwentyQuestionsTree::insert(BinaryNode *r,char *parent, char *left, char *right)
 {
-  if(r->question == parent)
-    {
+  if(r == NULL)
+  {
+    r = new BinaryNode(parent);
+    r->left = new BinaryNode(left);
+    r->right = new BinaryNode(right);
+    return true;
+  }
+  else if(!r->left && !r->right)
+  {
+      r->question = parent;
       r->left = new BinaryNode(left);
       r->right = new BinaryNode(right);
       return true;
-    }
+  }
+  else if(r->question == parent)
+  {
+    r->left = new BinaryNode(left);
+    r->right = new BinaryNode(right);
+    return true;
+  }
   else
-    {
-      if(r->left != NULL)
+  {
+    // if(r->left != NULL)                                                                          
         if(insert(r->left,parent,left,right)) return true;
-      if(r->right != NULL)
-        if(insert(r->right,parent,left,right)) return true;;
+        // if(r->right != NULL)                                                                     
+        if(insert(r->right,parent,left,right)) return true;
       return false;
-    }
+  }
+}
+void TwentyQuestionsTree::insert(char* parent, char* left, char* right)
+{
+  insert(root,parent,left,right);
 }
 /* modifyAndInsert                                                                                 \
                                                                                                     
@@ -96,6 +87,7 @@ bool TwentyQuestionsTree::insert(BinaryNode *r,char *parent, char *left, char *r
  */
 bool TwentyQuestionsTree::modifyAndInsert(BinaryNode *n,char *parent, char *left, char *right)
 {
+
   if(n->question == left || n->question == right)
     {
       n->question = parent;
@@ -104,13 +96,13 @@ bool TwentyQuestionsTree::modifyAndInsert(BinaryNode *n,char *parent, char *left
       return true;
     }
   else
-  {
-    if(n->left!=NULL)
-      if(modifyAndInsert(n->left,parent,left,right))return true;
-    if(n->right!=NULL)
-      if(modifyAndInsert(n->right,parent,left,right))return true;
-    return false;
-   }
+    {
+      if(n->left!=NULL)
+        if(modifyAndInsert(n->left,parent,left,right))return true;
+      if(n->right!=NULL)
+        if(modifyAndInsert(n->right,parent,left,right))return true;
+      return false;
+    }
 }
 void TwentyQuestionsTree::modifyAndInsert(char *parent, char *left, char *right)
 {
@@ -228,8 +220,8 @@ void TwentyQuestionsTree::storeTree(BinaryNode *n,FILE *fp)
     return;
   else if(n != NULL)
     {
-      fprintf(fp,"%s,%s,%s\n",n->question,n->left->question,n->right->question);
       storeTree(n->left,fp);
+      fprintf(fp,"%s,%s,%s\n",n->question,n->left->question,n->right->question);
       storeTree(n->right,fp);
     }
 }
@@ -237,11 +229,6 @@ void TwentyQuestionsTree::storeTree(FILE *fp)
 {
   storeTree(root, fp);
 }
-
-
-
-
-
 
 
 
