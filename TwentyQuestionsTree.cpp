@@ -61,11 +61,11 @@ bool TwentyQuestionsTree::insert(BinaryNode *r,char *parent, char *left, char *r
   }
   else
   {
-    // if(r->left != NULL)                                                                          
+    if(r->left != NULL)                                                                          
         if(insert(r->left,parent,left,right)) return true;
-        // if(r->right != NULL)                                                                     
+    if(r->right != NULL)                                                                     
         if(insert(r->right,parent,left,right)) return true;
-      return false;
+     return false;
   }
 }
 void TwentyQuestionsTree::insert(char* parent, char* left, char* right)
