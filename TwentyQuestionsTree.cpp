@@ -39,62 +39,36 @@ TwentyQuestionsTree::TwentyQuestionsTree()
 
 bool TwentyQuestionsTree::insert(BinaryNode *r,char *parent, char *left, char *right)
 {
-  if(r == NULL)
-  {
-    r = new BinaryNode(parent);
-    r->left = new BinaryNode(left);
-    r->right = new BinaryNode(right);
-    return true;
-  }
-  else if(!r->left && !r->right)
-  {
-      r->question = parent;
+  if(strcmp(r->question,parent)==0)
+    {
       r->left = new BinaryNode(left);
       r->right = new BinaryNode(right);
       return true;
-  }
-  else if(r->question == parent)
-  {
-    r->left = new BinaryNode(left);
-    r->right = new BinaryNode(right);
-    return true;
-  }
+    }
   else
-  {
-    if(r->left != NULL)                                                                          
+    {
+      if(r->left != NULL)
         if(insert(r->left,parent,left,right)) return true;
-    if(r->right != NULL)                                                                     
+      if(r->right != NULL)
         if(insert(r->right,parent,left,right)) return true;
-     return false;
-  }
+      return false;
+    }
 }
 void TwentyQuestionsTree::insert(char* parent, char* left, char* right)
 {
   insert(root,parent,left,right);
 }
-/* modifyAndInsert                                                                                 \
-                                                                                                    
- *                                                                                                 \
-                                                                                                    
- * This modifies the tree as a result of the game being incorrect.  Either                         \
-                                                                                                    
- * the left child or right child is already in the tree.  This method replaces                     \
-                                                                                                    
- * that existing one with the new parent and creates new left and right                            \
-                                                                                                    
- * children.                                                                                       \
-                                                                                                    
- */
+
 bool TwentyQuestionsTree::modifyAndInsert(BinaryNode *n,char *parent, char *left, char *right)
 {
 
-  if(n->question == left || n->question == right)
-    {
-      n->question = parent;
+  if(strcmp(n->question,left)==0 || strcmp(n->question,right)==0)
+  {
+      n = new BinaryNode(parent);
       n->left = new BinaryNode(left);
       n->right = new BinaryNode(right);
       return true;
-    }
+  }
   else
     {
       if(n->left!=NULL)
@@ -109,49 +83,13 @@ void TwentyQuestionsTree::modifyAndInsert(char *parent, char *left, char *right)
   modifyAndInsert(root,parent,left,right);
 }
 
-/* reset                                                                                           \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- *                                                                                                 \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * This resets the iterator to the beginning of the game                                           \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- */
+
 void TwentyQuestionsTree::reset()
 {
   iterator = root;
-
 }
 
-/* currentQuestions                                                                                \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- *                                                                                                 \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * This has been provided for you.  This looks at the current position of                          \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * the iterator and returns the question stored in that BinaryNode.                                \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- */
+
 char *TwentyQuestionsTree::currentQuestion()
 {
   if(iterator == NULL)
@@ -161,27 +99,7 @@ char *TwentyQuestionsTree::currentQuestion()
 }
 
 
-/* recordAnswer                                                                                    \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- *                                                                                                 \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * This advances the iterator.  If the answer was yes (1), go right.  If                           \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
-* no (0), go left.                                                                                 \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- */
+
 void TwentyQuestionsTree::recordAnswer(int answer)
 {
   if(answer == 0)
@@ -193,45 +111,20 @@ void TwentyQuestionsTree::recordAnswer(int answer)
 
 }
 
-/* storeTree                                                                                       \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- *                                                                                                 \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * This writes the tree out to the file in the same format as the                                  \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- * sample input file was.                                                                          \
-                                                                                                   \
-                                                                                                   \
-                                                                                                   \
-                                                                                                    
- */
+
 void TwentyQuestionsTree::storeTree(BinaryNode *n,FILE *fp)
 {
   if(n == NULL)
     return;
-  else if(n != NULL)
-    {
-      storeTree(n->left,fp);
-      fprintf(fp,"%s,%s,%s\n",n->question,n->left->question,n->right->question);
-      storeTree(n->right,fp);
-    }
+  else if(n->left != NULL)
+  {
+    fprintf(fp,"%s,%s,%s\n",n->question,n->left->question,n->right->question);
+    storeTree(n->left,fp);
+    storeTree(n->right,fp);
+  }
 }
+
 void TwentyQuestionsTree::storeTree(FILE *fp)
 {
   storeTree(root, fp);
 }
-
-
-
-
-
-
