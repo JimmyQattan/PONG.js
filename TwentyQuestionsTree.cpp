@@ -39,15 +39,7 @@ TwentyQuestionsTree::TwentyQuestionsTree()
 
 bool TwentyQuestionsTree::insert(BinaryNode *r,char *parent, char *left, char *right)
 {
-  if(r && r->left == NULL && r->right == NULL)
-  {
-    delete r->question;
-    r->question = new char[strlen(parent)+1];
-    strcpy(r->question,parent);
-    r->left = new BinaryNode(left);
-    r->right = new BinaryNode(right);
-    return true;
-  }
+ 
   if(strcmp(r->question,parent)==0)
     {
       r->left = new BinaryNode(left);
