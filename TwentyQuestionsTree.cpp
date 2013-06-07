@@ -65,39 +65,34 @@ bool TwentyQuestionsTree::modifyAndInsert(BinaryNode *n,char *parent, char *left
     {
       if(strcmp(n->question,left)==0)
       {
-    char *o = new char[strlen(n->question)+1];
-    strcpy(o,n->question);
-    delete n->question;
-    n->question = new char[strlen(parent)+1];
-    strcpy(n->question,parent);
-    n->left = new BinaryNode(o);
-    n->right = new BinaryNode(right);
-    delete o;
-    return true;
+        char *o = new char[strlen(n->question)+1];
+        strcpy(o,n->question);
+        delete n->question;
+        n->question = new char[strlen(parent)+1];
+        strcpy(n->question,parent);
+        n->left = new BinaryNode(o);
+        n->right = new BinaryNode(right);
+        delete o;
+        return true;
       }
       else if(strcmp(n->question,right)==0)
       {
-    char *o= new char[strlen(n->question)+1];
-    strcpy(o,n->question);
+        char *o= new char[strlen(n->question)+1];
+        strcpy(o,n->question);
         delete n->question;
         n->question = new char[strlen(parent)+1];
-    strcpy(n->question,parent);
+        strcpy(n->question,parent);
         n->left = new BinaryNode(left);
         n->right = new BinaryNode(o);
-    delete o;
+        delete o;
         return true;
-
       }
     }
     else
     {
-     
-    modifyAndInsert(n->left,parent,left,right);
-    modifyAndInsert(n->right,parent,left,right);
-    return false;
-    
-
-
+        modifyAndInsert(n->left,parent,left,right);
+        modifyAndInsert(n->right,parent,left,right);
+        return false;
     }
 }
  
