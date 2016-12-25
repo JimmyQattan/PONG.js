@@ -142,7 +142,7 @@ var draw = function() {
         dots[i].update(player);
     }
     checkForCollisions(player, dots);
-    text("Score:" + GameScore + "Level" + Level, 20, 20);
+    text("Score: " + GameScore + "\nLevel:    " + Level, 20, 20);
     if (dots.length === 0) {
         // the level is cleared. make a new set of dots. increase the level and difficulty
         for (var i = 0; i < 10; i++) {
