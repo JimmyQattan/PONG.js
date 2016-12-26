@@ -1,3 +1,5 @@
+//when you equal one answer, press restart to do another one because it will put any number
+
 var Result = 0;
 var NumClicks = 0;
 var Operand1 = 0;
@@ -18,6 +20,9 @@ var Calc = function() {
     if (Operator === "-") {
         return Operand1 - Operand2;
     }
+    if (Operator === "%") {
+        return Operand1 % Operand2;
+    }
     
 };
 
@@ -34,7 +39,7 @@ var Button7 = function() {
             if (NumClicks === 2) {
                 Operand2 = 7;
             }
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         println("7");
         };
      
@@ -63,7 +68,7 @@ var Button8 = function() {
                 Operand2 = 8;
             }
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -93,7 +98,7 @@ var Button9 = function() {
                 Operand2 = 9;
             }
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -122,7 +127,7 @@ if (mouseClicked && mouseX >= 0 && mouseX <= 50 && mouseY >= 50 && mouseY <= 100
                 Operand2 = 4;
             }
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -151,7 +156,7 @@ var Button5 = function() {
                 Operand2 = 5;
             }
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -181,7 +186,7 @@ var Button6 = function() {
                 Operand2 = 6;
             }
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -210,7 +215,7 @@ var Button1 = function() {
                 Operand2 = 1;
             }
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -238,7 +243,7 @@ var Button2 = function() {
                 Operand2 = 2;
             }
             
-            NumClicks = NumClicks + 1;
+           NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -267,7 +272,7 @@ var Button3 = function() {
                 Operand2 = 3;
             }
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -296,7 +301,7 @@ var Button0 = function() {
                 Operand2 = 0;
             }
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -320,7 +325,7 @@ var Add = function() {
             
             Operator = "+";
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
             
         };
         
@@ -344,7 +349,7 @@ var Subtract = function() {
             
             Operator = "-";
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -367,7 +372,7 @@ var Multiply = function() {
             
             Operator = "*";
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -390,7 +395,7 @@ var Divide = function() {
             
             Operator = "/";
             
-            NumClicks = NumClicks + 1;
+            NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -416,7 +421,7 @@ var Equal = function() {
             
             println("=" + Result);
             
-            NumClicks = NumClicks + 1;
+           NumClicks = (NumClicks + 1) % (4);
         };
         
         
@@ -432,8 +437,52 @@ var Equal = function() {
     text("=", 122, 180);
 
 };
-   
- 
+
+var Modulo = function() {
+    if (mouseClicked && mouseX >= 0 && mouseX <= 50 && mouseY >= 150 && mouseY <= 200 && (NumClicks === 1 || NumClicks === 3)) {
+        mouseClicked = function() {
+            println("%");
+            
+            Operator = "%";
+            
+            NumClicks = (NumClicks + 1) % (4);
+        };
+        
+        
+    
+        
+    } else {
+        fill(255, 255, 255);
+    }
+    
+    fill(255, 255, 255);
+    rect(0, 150, 50, 50);
+    fill(255, 0, 0);
+    text("%", 19, 180);
+};
+
+var CE = function() {
+    if (mouseClicked && mouseX >= 200 && mouseX <= 250 && mouseY >= 0 && mouseY <= 50) {
+        mouseClicked = function() {
+            NumClicks = 0;
+            println("CLEARED\n\n\n\n\n\n\n");
+        };
+        
+        
+    
+        
+    } else {
+        fill(255, 255, 255);
+    }
+    
+    fill(255, 255, 255);
+    rect(200, 0, 50, 50);
+    fill(255, 0, 0);
+    text("CE", 212, 33);
+};
+
+
+
 draw = function() {
     Button7();
     Button8();
@@ -450,6 +499,8 @@ draw = function() {
     Multiply();
     Divide();
     Equal();
+    Modulo();
+    CE();
     
 };
 
