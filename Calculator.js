@@ -1,5 +1,3 @@
-//when you equal one answer, press restart to do another one because it will put any number
-
 var Result = 0;
 var NumClicks = 0;
 var Operand1 = 0;
